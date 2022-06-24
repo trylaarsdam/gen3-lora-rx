@@ -18,7 +18,12 @@ public:
   Apollo_LoRA();
 
   /**
-   * transmits data over LoRA
+   * Transmits data over LoRA.
    */
   void transmit(string data);
+
+  /**
+   * Receives data over LoRA. Returns null if there is no data.
+   */
+  string recieve();
 };

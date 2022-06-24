@@ -15,20 +15,46 @@ Apollo_LoRA::Apollo_LoRA()
 }
 
 /**
- * Example method.
+ * Transmits data over LoRA.
  */
 void Apollo_LoRA::transmit(string data)
 {
-    WITH_LOCK(Serial1)
-    {
-        Serial1.println(("setdata/" + data + "/").c_str());
-        delay(100);
-        Serial1.println("transmit//");
 
-        // flush serial data
+    Serial1.println(("setdata/" + data + "/").c_str());
+    delay(100);
+    Serial1.println("transmit//");
+
+    // flush serial data
+    while (Serial1.available() > 0)
+    {
+        Serial1.read();
+    }
+}
+
+/**
+ * Receives data over LoRA. Returns null if there is no data.
+ * This code was written by Arjun.
+ */
+string Apollo_LoRA::recieve()
+{
+
+    if (Serial1.available() > 0)
+    {
+        std::string payload = "";
         while (Serial1.available() > 0)
         {
-            Serial1.read();
+            payload += Serial1.read();
         }
+
+        int sizePos = payload.find("Size") + 5;
+        int size = atoi(payload.substr(sizePos, 2).c_str());
+
+        payload = payload.substr(9 + payload.find("/"), size).c_str();
+
+        return payload;
+    }
+    else
+    {
+        return NULL;
     }
 }
