@@ -23,4 +23,10 @@ void Apollo_LoRA::transmit(string data)
     Serial1.println(("setdata/" + data + "/").c_str());
     delay(100);
     Serial1.println("transmit//");
+
+    // flush serial data
+    while (Serial1.available() > 0)
+    {
+        Serial1.read();
+    }
 }

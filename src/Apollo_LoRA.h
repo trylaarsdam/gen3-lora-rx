@@ -21,10 +21,4 @@ public:
    * transmits data over LoRA
    */
   void transmit(string data);
-
-private:
-  /**
-   * Example private method
-   */
-  void doit();
 };
