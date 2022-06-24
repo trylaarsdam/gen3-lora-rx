@@ -19,14 +19,16 @@ Apollo_LoRA::Apollo_LoRA()
  */
 void Apollo_LoRA::transmit(string data)
 {
-    Serial.printlnf("sending `%s`...", data.c_str());
-    Serial1.println(("setdata/" + data + "/").c_str());
-    delay(100);
-    Serial1.println("transmit//");
-
-    // flush serial data
-    while (Serial1.available() > 0)
+    WITH_LOCK(Serial1)
     {
-        Serial1.read();
+        Serial1.println(("setdata/" + data + "/").c_str());
+        delay(100);
+        Serial1.println("transmit//");
+
+        // flush serial data
+        while (Serial1.available() > 0)
+        {
+            Serial1.read();
+        }
     }
 }
