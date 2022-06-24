@@ -1,6 +1,6 @@
 // Example usage for apollo-lora-transmit library by Ian Pratt <ianjdpratt@gmail.com>.
 
-#include "Apollo_LoRA_Transmit.h"
+#include "Apollo_LoRA.h"
 
 // Initialize objects from the lib
 Apolloloratransmit apolloloratransmit;
