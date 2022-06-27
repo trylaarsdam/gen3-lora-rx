@@ -58,8 +58,8 @@ public:
 
   /**
    * This code was written by Arjun.
-   * Receives data over LoRA. Returns null if there is no data.
-   * @return The received data, a string. NULL if no data is recieved at the time.
+   * Receives data over LoRA.
+   * @return The received data, a string. Empty string if no data is recieved at the time.
    */
   string recieve();
 

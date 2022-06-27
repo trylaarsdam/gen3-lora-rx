@@ -105,6 +105,6 @@ string Apollo_LoRA::recieve()
     }
     else
     {
-        return NULL;
+        return "";
     }
 }
