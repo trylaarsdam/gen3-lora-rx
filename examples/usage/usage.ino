@@ -2,17 +2,25 @@
 
 #include "Apollo_LoRA.h"
 
-// Initialize objects from the lib
-Apolloloratransmit apolloloratransmit;
+// Initialize the object from the lib
+Apollo_LoRA transmitter(&Serial1);
 
 void setup()
 {
-    // Call functions on initialized library objects that require hardware
-    apolloloratransmit.begin();
+    Serial.begin(9600);
+    Serial1.begin(9600);
 }
 
 void loop()
 {
-    // Use the library's initialized objects and functions
-    apolloloratransmit.process();
+    // transmit a string of data
+    transmitter.transmit("Hello, world!");
+
+    string recieved = "";
+    while (recieved == "")
+    {
+        recieved = transmitter.recieve();
+    }
+
+    Serial.println(recieved);
 }
