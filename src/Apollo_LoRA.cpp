@@ -34,6 +34,7 @@ void Apollo_LoRA::transmit(string data)
 /**
  * Receives data over LoRA. Returns null if there is no data.
  * This code was written by Arjun.
+ * Returns NULL if there is no data.
  */
 string Apollo_LoRA::recieve()
 {
