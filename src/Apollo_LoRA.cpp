@@ -15,10 +15,19 @@ void flush_serial_buffer(USARTSerial *serial)
     }
 }
 
-Apollo_LoRA::Apollo_LoRA(USARTSerial *chosenSerial)
+Apollo_LoRA::Apollo_LoRA(USARTSerial *chosenSerial = &Serial1)
 {
     serial = chosenSerial;
     serial->begin(9600);
+}
+
+Apollo_LoRA::Apollo_LoRA(USARTSerial *chosenSerial = &Serial1, int codingrate = 1, int spreadingfactor = 12, int transmissionpower = 18)
+{
+    serial = chosenSerial;
+    serial->begin(9600);
+    codingRate(codingrate);
+    spreadingFactor(spreadingfactor);
+    transmissionPower(transmissionpower);
 }
 
 void Apollo_LoRA::codingRate(int codingRate)

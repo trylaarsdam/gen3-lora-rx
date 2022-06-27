@@ -19,6 +19,15 @@ public:
   Apollo_LoRA(USARTSerial *serial);
 
   /**
+   * Constructor
+   * @param serial The serial port to use, a string. Defaults to Serial1.
+   * @param codingrate Sets the coding rate. Defaults to 1 (4/5). See `codingRate` for more information.
+   * @param spreadingfactor Sets the spreading factor. Defaults to 12. See `spreadingFactor` for more information.
+   * @param transmissionpower Sets the transmit power in dB. Defaults to 18. See `transmissionPower` for more information.
+   */
+  Apollo_LoRA(USARTSerial *serial, int codingrate, int spreadingfactor, int transmissionpower);
+
+  /**
    * Sets the coding rate. The four coding rates are enumerated as:
    * 1: 4/5
    * 2: 4/6
