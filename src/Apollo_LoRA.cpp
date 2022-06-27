@@ -1,50 +1,90 @@
 /* Apollo_LoRA library by Ian Pratt <ianjdpratt@gmail.com>
  */
 
+#include "stdio.h"
 #include "Particle.h"
 #include "Apollo_LoRA.h"
 
 using namespace std;
 
-/**
- * Constructor.
- */
-Apollo_LoRA::Apollo_LoRA()
+void flush_serial_buffer(USARTSerial *serial)
 {
-    // be sure not to call anything that requires hardware be initialized here, put those in begin()
-}
-
-/**
- * Transmits data over LoRA.
- */
-void Apollo_LoRA::transmit(string data)
-{
-
-    Serial1.println(("setdata/" + data + "/").c_str());
-    delay(100);
-    Serial1.println("transmit//");
-
-    // flush serial data
-    while (Serial1.available() > 0)
+    while (serial->available() > 0)
     {
-        Serial1.read();
+        serial->read();
     }
 }
 
-/**
- * Receives data over LoRA. Returns null if there is no data.
- * This code was written by Arjun.
- * Returns NULL if there is no data.
- */
+Apollo_LoRA::Apollo_LoRA(USARTSerial *chosenSerial)
+{
+    serial = chosenSerial;
+    serial->begin(9600);
+}
+
+void Apollo_LoRA::codingRate(int codingRate)
+{
+    if (codingRate < 1 || codingRate > 4)
+    {
+        codingRate = 1;
+    }
+
+    char buffer[1];
+
+    serial->print("codingrate/" + *itoa(codingRate, buffer, 10));
+    serial->println("/");
+
+    flush_serial_buffer(serial);
+}
+
+void Apollo_LoRA::spreadingFactor(int spreadingFactor)
+{
+    if (spreadingFactor < 7 || spreadingFactor > 12)
+    {
+        spreadingFactor = 12;
+    }
+
+    char buffer[1];
+
+    serial->print("sf/" + *itoa(spreadingFactor, buffer, 10));
+    serial->println("/");
+
+    flush_serial_buffer(serial);
+}
+
+void Apollo_LoRA::transmissionPower(int transmissionPower)
+{
+    if (transmissionPower < 0 || transmissionPower > 24)
+    {
+        transmissionPower = 18;
+    }
+
+    char buffer[1];
+
+    serial->print("txp/" + *itoa(transmissionPower, buffer, 10));
+    serial->println("/");
+
+    flush_serial_buffer(serial);
+}
+
+void Apollo_LoRA::transmit(string data)
+{
+
+    serial->println(("setdata/" + data + "/").c_str());
+    delay(100);
+    serial->println("transmit//");
+
+    flush_serial_buffer(serial);
+}
+
 string Apollo_LoRA::recieve()
 {
 
-    if (Serial1.available() > 0)
+    if (serial->available() > 0)
     {
         std::string payload = "";
-        while (Serial1.available() > 0)
+        while (serial->available() > 0)
         {
-            payload += Serial1.read();
+            payload += serial->read();
         }
 
         int sizePos = payload.find("Size") + 5;
