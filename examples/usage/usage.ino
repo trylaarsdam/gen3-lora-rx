@@ -22,5 +22,5 @@ void loop()
         recieved = transmitter.recieve();
     }
 
-    Serial.println(recieved);
+    Serial.println(recieved.c_str());
 }
