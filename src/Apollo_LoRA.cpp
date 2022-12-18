@@ -95,11 +95,14 @@ string Apollo_LoRA::recieve()
         {
             payload += serial->read();
         }
+				
 
         int sizePos = payload.find("Size") + 5;
         int size = atoi(payload.substr(sizePos, 2).c_str());
 
         payload = payload.substr(9 + payload.find("/"), size).c_str();
+
+				LoRaPacket packet = {};
 
         return payload;
     }

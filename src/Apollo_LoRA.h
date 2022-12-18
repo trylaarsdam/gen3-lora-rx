@@ -65,3 +65,11 @@ public:
 
   USARTSerial *serial;
 };
+
+struct LoRaPacket {
+	uint8_t payload[255];
+	uint8_t size;
+	int rssi;
+	uint8_t sf;
+	uint8_t cr;
+};
