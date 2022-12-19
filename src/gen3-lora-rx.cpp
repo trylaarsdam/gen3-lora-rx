@@ -151,6 +151,14 @@ string Apollo_LoRA::recieve()
 	}
 	Serial.println("Size: " + String(size));
 
+	uint8_t start = searchForString(payload, "/Payload/") + 9;
+	uint8_t end = searchForString(payload, "/Size/") - 1;
+	char data[end - start + 2] = {0};
+	for (int i = start; i < end + 1; i++)
+	{
+		data[i - start] = payload[i];
+	}
+	Serial.println("Data: " + String(data));
 
 	// 	// // LoRaPacket packet = {};
 	return "";
