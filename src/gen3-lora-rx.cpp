@@ -142,12 +142,12 @@ string Apollo_LoRA::recieve()
 		}
 	}
 	Serial.println("Payload: " + String(payload));
-	uint8_t size_start = searchForString(payload, "/Size/") + 6;
-	uint8_t size_end = searchForString(payload, "/RSSI/") - 1;
-	char size[size_end - size_start + 2] = {0};
-	for (int i = size_start; i < size_end + 1; i++)
+	uint8_t start = searchForString(payload, "/Size/") + 6;
+	uint8_t end = searchForString(payload, "/RSSI/") - 1;
+	char size[end - start + 2] = {0};
+	for (int i = start; i < end + 1; i++)
 	{
-		size[i - size_start] = payload[size_start];
+		size[i - start] = payload[i];
 	}
 	Serial.println("Size: " + String(size));
 
