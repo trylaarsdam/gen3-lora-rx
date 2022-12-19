@@ -18,6 +18,14 @@ public:
    */
   Apollo_LoRA(USARTSerial *serial);
 
+	struct LoRaPacket {
+		uint8_t* data;
+		uint8_t size;
+		int rssi;
+		uint8_t sf;
+		uint8_t cr;
+	};
+
   /**
    * Constructor
    * @param serial The serial port to use, a string. Defaults to Serial1.
@@ -61,15 +69,7 @@ public:
    * Receives data over LoRA.
    * @return The received data, a string. Empty string if no data is recieved at the time.
    */
-  string recieve();
+  Apollo_LoRA::LoRaPacket recieve();
 
   USARTSerial *serial;
-};
-
-struct LoRaPacket {
-	uint8_t payload[255];
-	uint8_t size;
-	int rssi;
-	uint8_t sf;
-	uint8_t cr;
 };

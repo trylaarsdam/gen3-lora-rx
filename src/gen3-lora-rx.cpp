@@ -111,7 +111,7 @@ void Apollo_LoRA::transmit(string data)
 	flush_serial_buffer(serial);
 }
 
-string Apollo_LoRA::recieve()
+Apollo_LoRA::LoRaPacket Apollo_LoRA::recieve()
 {
 	char payload[256] = {0};
 
@@ -150,16 +150,54 @@ string Apollo_LoRA::recieve()
 		size[i - start] = payload[i];
 	}
 	Serial.println("Size: " + String(size));
+	uint8_t size_int = atoi(size);
 
-	uint8_t start = searchForString(payload, "/Payload/") + 9;
-	uint8_t end = searchForString(payload, "/Size/") - 1;
-	char data[end - start + 2] = {0};
+	start = searchForString(payload, "/Payload/") + 9;
+	end = searchForString(payload, "/Size/") - 1;
+	uint8_t data[end - start + 2] = {0};
 	for (int i = start; i < end + 1; i++)
 	{
 		data[i - start] = payload[i];
 	}
-	Serial.println("Data: " + String(data));
+	Serial.print("Data: ");
+	uint8_t data_payload[atoi(size)];
+	for (int i = 0; i < atoi(size); i++)
+	{
+		Serial.print((char)data[i]);
+		data_payload[i] = data[i];
+	}
+	Serial.println();
 
-	// 	// // LoRaPacket packet = {};
-	return "";
+	start = searchForString(payload, "/RSSI/") + 6;
+	end = searchForString(payload, "/SF/") - 1;
+	char rssi[end - start + 2] = {0};
+	for (int i = start; i < end + 1; i++)
+	{
+		rssi[i - start] = payload[i];
+	}
+	Serial.println("RSSI: " + String(rssi));
+	int rssi_int = atoi(rssi);
+
+	start = searchForString(payload, "/SF/") + 4;
+	end = searchForString(payload, "/CR/") - 1;
+	char sf[end - start + 2] = {0};
+	for (int i = start; i < end + 1; i++)
+	{
+		sf[i - start] = payload[i];
+	}
+	Serial.println("SF: " + String(sf));
+	uint8_t sf_int = atoi(sf);
+
+	start = searchForString(payload, "/CR/") + 4;
+	end = searchForString(payload, "/;") - 1;
+	char cr[end - start + 2] = {0};
+	for (int i = start; i < end + 1; i++)
+	{
+		cr[i - start] = payload[i];
+	}
+	Serial.println("CR: " + String(cr));
+	uint8_t cr_int = atoi(cr);
+
+	LoRaPacket packet = (LoRaPacket) {.data = data_payload, .size = size_int, .rssi = rssi_int, .sf = sf_int, .cr = cr_int};
+	return packet;
 }
