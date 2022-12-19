@@ -11,6 +11,8 @@ using namespace std;
 // The main class for the Apollo_LoRA library. This class is used to communicate with the LoRA module.
 class Apollo_LoRA
 {
+private:
+	char payload[256] = {0};
 public:
   /**
    * Constructor
@@ -19,12 +21,13 @@ public:
   Apollo_LoRA(USARTSerial *serial);
 
 	struct LoRaPacket {
-		uint8_t* data;
+		uint8_t data[64];
 		uint8_t size;
 		int rssi;
 		uint8_t sf;
 		uint8_t cr;
 	};
+
 
   /**
    * Constructor
@@ -64,12 +67,20 @@ public:
    */
   void transmit(string data);
 
+	/**
+	 * Functions to return data from last received packet
+	 */
+	std::string getPayload(size_t size);
+	uint8_t getSize(void);
+	int getRSSI(void);
+	uint8_t getSF(void);
+	uint8_t getCR(void);
+
   /**
-   * This code was written by Arjun.
    * Receives data over LoRA.
    * @return The received data, a string. Empty string if no data is recieved at the time.
    */
-  Apollo_LoRA::LoRaPacket recieve();
+  bool receive(void);
 
   USARTSerial *serial;
 };
