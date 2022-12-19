@@ -13,14 +13,16 @@ class Apollo_LoRA
 {
 private:
 	char payload[256] = {0};
-public:
-  /**
-   * Constructor
-   * @param serial The serial port to use, a string. Defaults to Serial1.
-   */
-  Apollo_LoRA(USARTSerial *serial);
 
-	struct LoRaPacket {
+public:
+	/**
+	 * Constructor
+	 * @param serial The serial port to use, a string. Defaults to Serial1.
+	 */
+	Apollo_LoRA(USARTSerial *serial);
+
+	struct LoRaPacket
+	{
 		uint8_t data[64];
 		uint8_t size;
 		int rssi;
@@ -28,44 +30,43 @@ public:
 		uint8_t cr;
 	};
 
+	/**
+	 * Constructor
+	 * @param serial The serial port to use, a string. Defaults to Serial1.
+	 * @param codingrate Sets the coding rate. Defaults to 1 (4/5). See `codingRate` for more information.
+	 * @param spreadingfactor Sets the spreading factor. Defaults to 12. See `spreadingFactor` for more information.
+	 * @param transmissionpower Sets the transmit power in dB. Defaults to 18. See `transmissionPower` for more information.
+	 */
+	Apollo_LoRA(USARTSerial *serial, int codingrate, int spreadingfactor, int transmissionpower);
 
-  /**
-   * Constructor
-   * @param serial The serial port to use, a string. Defaults to Serial1.
-   * @param codingrate Sets the coding rate. Defaults to 1 (4/5). See `codingRate` for more information.
-   * @param spreadingfactor Sets the spreading factor. Defaults to 12. See `spreadingFactor` for more information.
-   * @param transmissionpower Sets the transmit power in dB. Defaults to 18. See `transmissionPower` for more information.
-   */
-  Apollo_LoRA(USARTSerial *serial, int codingrate, int spreadingfactor, int transmissionpower);
+	/**
+	 * Sets the coding rate. The four coding rates are enumerated as:
+	 * 1: 4/5
+	 * 2: 4/6
+	 * 3: 4/7
+	 * 4: 4/8
+	 * Defaults to 1 (4/5).
+	 * @param codingRate The coding rate to use, an int between 1-4.
+	 */
+	void codingRate(int codingRate);
 
-  /**
-   * Sets the coding rate. The four coding rates are enumerated as:
-   * 1: 4/5
-   * 2: 4/6
-   * 3: 4/7
-   * 4: 4/8
-   * Defaults to 1 (4/5).
-   * @param codingRate The coding rate to use, an int between 1-4.
-   */
-  void codingRate(int codingRate);
+	/**
+	 * Sets the spreading factor. Defaults to 12.
+	 * @param spreadingFactor The spreading factor, an int between 7-12.
+	 */
+	void spreadingFactor(int spreadingFactor);
 
-  /**
-   * Sets the spreading factor. Defaults to 12.
-   * @param spreadingFactor The spreading factor, an int between 7-12.
-   */
-  void spreadingFactor(int spreadingFactor);
+	/**
+	 * Sets the transmit power in dB. This is separate from the low/high power switch on the external PA. Defaults to 18 (3/4 full power)
+	 * @param transmissionPower the transmissionPower, an int between 0-24.
+	 */
+	void transmissionPower(int transmissionPower);
 
-  /**
-   * Sets the transmit power in dB. This is separate from the low/high power switch on the external PA. Defaults to 18 (3/4 full power)
-   * @param transmissionPower the transmissionPower, an int between 0-24.
-   */
-  void transmissionPower(int transmissionPower);
-
-  /**
-   * Transmits data over LoRA.
-   * @param data The data to transmit, a string.
-   */
-  void transmit(string data);
+	/**
+	 * Transmits data over LoRA.
+	 * @param data The data to transmit, a string.
+	 */
+	void transmit(string data);
 
 	/**
 	 * Functions to return data from last received packet
@@ -76,11 +77,11 @@ public:
 	uint8_t getSF(void);
 	uint8_t getCR(void);
 
-  /**
-   * Receives data over LoRA.
-   * @return The received data, a string. Empty string if no data is recieved at the time.
-   */
-  bool receive(void);
+	/**
+	 * Receives data over LoRA.
+	 * @return The received data, a string. Empty string if no data is recieved at the time.
+	 */
+	bool receive(void);
 
-  USARTSerial *serial;
+	USARTSerial *serial;
 };

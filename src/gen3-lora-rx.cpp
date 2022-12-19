@@ -15,28 +15,35 @@ void flush_serial_buffer(USARTSerial *serial)
 	}
 }
 
-int searchForString(char* fullString, char* searchString) {
+int searchForString(char *fullString, char *searchString)
+{
 	int i = 0;
 	int j = 0;
 	int k = 0;
 	int found = 0;
 	int notFound = -1;
-	while (fullString[i] != '\0') {
+	while (fullString[i] != '\0')
+	{
 		j = i;
 		k = 0;
-		while (searchString[k] != '\0' && fullString[j] == searchString[k]) {
+		while (searchString[k] != '\0' && fullString[j] == searchString[k])
+		{
 			j++;
 			k++;
 		}
-		if (k > 0 && searchString[k] == '\0') {
+		if (k > 0 && searchString[k] == '\0')
+		{
 			found = 1;
 			break;
 		}
 		i++;
 	}
-	if (found == 1) {
+	if (found == 1)
+	{
 		return i;
-	} else {
+	}
+	else
+	{
 		return notFound;
 	}
 }
@@ -115,7 +122,7 @@ bool Apollo_LoRA::receive()
 {
 	bool continueReading = true;
 	bool potentialEndOfMessage = false;
-	int len = 0; 
+	int len = 0;
 
 	// reset payload for new transmission
 	memset(&payload[0], 0, 256);
@@ -129,7 +136,7 @@ bool Apollo_LoRA::receive()
 			{
 				potentialEndOfMessage = true;
 			}
-			else if(potentialEndOfMessage && c == ';')
+			else if (potentialEndOfMessage && c == ';')
 			{
 				continueReading = false;
 			}
@@ -148,7 +155,8 @@ bool Apollo_LoRA::receive()
 	return true;
 }
 
-std::string Apollo_LoRA::getPayload(size_t size) {
+std::string Apollo_LoRA::getPayload(size_t size)
+{
 	uint8_t start = searchForString(payload, "/Payload/") + 9;
 	uint8_t end = searchForString(payload, "/Size/") - 1;
 	uint8_t data[end - start + 2] = {0};
@@ -156,24 +164,23 @@ std::string Apollo_LoRA::getPayload(size_t size) {
 	{
 		data[i - start] = payload[i];
 	}
-	Serial.print("Data: ");
 
 	std::string data_string = "";
 
-	for (int i = 0; i < size; i++) {
-		Serial.print((char)data[i]);
-		// HTTPpayload += recieved.data[i];
+	for (int i = 0; i < size; i++)
+	{
 		char hexCharacter[5] = {0};
 		sprintf(hexCharacter, "%02X", data[i]);
-		Serial.println("Hex character: " + String(hexCharacter));
 		data_string += hexCharacter;
 	}
-	Serial.println();
+
+	Serial.printlnf("Data: %s", data_string.c_str());
 
 	return data_string;
 }
 
-uint8_t Apollo_LoRA::getSize() {
+uint8_t Apollo_LoRA::getSize()
+{
 	uint8_t start = searchForString(payload, "/Size/") + 6;
 	uint8_t end = searchForString(payload, "/RSSI/") - 1;
 	char size[end - start + 2] = {0};
@@ -185,7 +192,8 @@ uint8_t Apollo_LoRA::getSize() {
 	return atoi(size);
 }
 
-int Apollo_LoRA::getRSSI() {
+int Apollo_LoRA::getRSSI()
+{
 	uint8_t start = searchForString(payload, "/RSSI/") + 6;
 	uint8_t end = searchForString(payload, "/SF/") - 1;
 	char rssi[end - start + 2] = {0};
@@ -197,7 +205,8 @@ int Apollo_LoRA::getRSSI() {
 	return atoi(rssi);
 }
 
-uint8_t Apollo_LoRA::getSF() {
+uint8_t Apollo_LoRA::getSF()
+{
 	uint8_t start = searchForString(payload, "/SF/") + 4;
 	uint8_t end = searchForString(payload, "/CR/") - 1;
 	char sf[end - start + 2] = {0};
@@ -209,7 +218,8 @@ uint8_t Apollo_LoRA::getSF() {
 	return atoi(sf);
 }
 
-uint8_t Apollo_LoRA::getCR() {
+uint8_t Apollo_LoRA::getCR()
+{
 	uint8_t start = searchForString(payload, "/CR/") + 4;
 	uint8_t end = searchForString(payload, "/;") - 1;
 	char cr[end - start + 2] = {0};
